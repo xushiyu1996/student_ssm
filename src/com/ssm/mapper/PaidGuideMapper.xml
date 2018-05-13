@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+  
+<mapper namespace="com.ssm.mapper.PaidGuideMapper">
+  <resultMap id="BasePaidGuide" type="com.ssm.po.PaidGuide">
+		<id column="guide_id" jdbcType="INTEGER" property="guideId"/>
+		<id column="user_id" jdbcType="INTEGER" property="userId"/>
+		<result column="coach_name" jdbcType="VARCHAR" property="coachName"/>
+		<result column="guide_name" jdbcType="VARCHAR" property="guideName"/>
+		<result column="user_name" jdbcType="VARCHAR" property="userName"/>
+		<result column="coach_id" jdbcType="INTEGER" property="coachId"/>
+		<result column="guide_price" jdbcType="INTEGER" property="guidePrice"/>
+		<result column="guide_rate" jdbcType="INTEGER" property="guideRate"/>
+		<result column="guide_remark" jdbcType="VARCHAR" property="guideRemark"/>
+		</resultMap>
+     
+			        
+         
+    <!--注意sql语句没有分号结尾  -->  
+      <sql id="Base_Column_List">
+		guide_id, user_id, coach_id,guide_name,user_name,coach_name, 
+		guide_price, guide_rate	,guide_remark	</sql>
+      
+    <insert id="addPaidGuide" parameterType="com.ssm.po.PaidGuide">
+	insert into paid_guide (guide_id, user_id, coach_id, 
+	guide_name,user_name,coach_name,guide_price, guide_rate) 
+	values (#{guideId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+	#{coachId,jdbcType=INTEGER}, 
+	#{guideName,jdbcType=VARCHAR},
+	#{userName,jdbcType=VARCHAR},
+	#{coachName,jdbcType=VARCHAR},	
+	#{guidePrice,jdbcType=INTEGER}, #{guideRate,jdbcType=INTEGER})
+	</insert>
+     
+    <select id="findPaidGuideByUserId" parameterType="java.lang.Integer" resultMap="BasePaidGuide">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from paid_guide where user_id=#{userId}
+    </select>
+    
+    <select id="findPaidGuideByCoachId" parameterType="java.lang.Integer" resultMap="BasePaidGuide">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from paid_guide where coach_id=#{coachId}
+    </select>
+     
+     <update id="setPaidGuideRate" parameterType="com.ssm.po.PaidGuide">
+     	update paid_guide
+     	set guide_rate=#{guideRate},
+     	guide_remark=#{guideRemark}
+     	where user_id=#{userId} and guide_id=#{guideId}
+     </update>  
+      
+      <select id="getRatedPaiGuide" parameterType="com.ssm.po.PaidGuide" resultMap="BasePaidGuide">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from paid_guide where  guide_id=#{guideId}
+ 		and guide_rate>=0
+    </select>
+      
+       <select id="hasPaidGuide" parameterType="com.ssm.po.PaidGuide" resultType="java.lang.Integer">
+    	select count(*)
+ 		from paid_guide where  
+ 		user_id=#{userId} and guide_id=#{guideId}		
+    </select>
+    
+    <select id="findPaidGuideByGuideId" parameterType="java.lang.Integer" resultMap="BasePaidGuide">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from paid_guide where guide_id=#{guideId} and guide_rate>-1
+    </select>
+    
+    <select id="findPaidGuideByUserIdAndGuideId" parameterType="com.ssm.po.PaidGuide" resultMap="BasePaidGuide">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from paid_guide where user_id=#{userId} and guide_id=#{guideId}
+    </select>
+</mapper>  

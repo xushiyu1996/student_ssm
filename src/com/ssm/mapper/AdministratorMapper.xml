@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+  
+<mapper namespace="com.ssm.mapper.AdministratorMapper">
+  
+      <resultMap id="BaseAdministrator" type="com.ssm.po.Administrator">
+			<id column="administrator_id" jdbcType="INTEGER" property="administratorId"/>
+			<result column="administrator_name" jdbcType="VARCHAR" property="administratorName"/>
+			<result column="administrator_mobile" jdbcType="VARCHAR" property="administratorMobile"/>
+			<result column="administrator_gender" jdbcType="VARCHAR" property="administratorGender"/>
+			<result column="administrator_username" jdbcType="VARCHAR" property="administratorUsername"/>
+			<result column="administrator_password" jdbcType="VARCHAR" property="administratorPassword"/>
+			</resultMap>
+        
+         
+    <!--注意sql语句没有分号结尾  -->  
+      <sql id="Base_Column_List">
+		administrator_id, administrator_name, administrator_mobile, administrator_gender, administrator_username, administrator_password
+	</sql>
+      
+   
+    
+    <select id="selectAdministratorByUserNameAndPassword" parameterType="com.ssm.po.Administrator" resultMap="BaseAdministrator">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from administrator where administrator_username=#{administratorUsername} and administrator_password=#{administratorPassword}
+    </select>
+    
+      
+       
+      
+</mapper>  

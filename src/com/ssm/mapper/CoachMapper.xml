@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+  
+<mapper namespace="com.ssm.mapper.CoachMapper">
+  
+      <resultMap id="BaseCoach" type="com.ssm.po.Coach">
+			<id column="coach_id" jdbcType="INTEGER" property="coachId"/>
+			<result column="coach_name" jdbcType="VARCHAR" property="coachName"/>
+			<result column="coach_mobile" jdbcType="VARCHAR" property="coachMobile"/>
+			<result column="coach_gender" jdbcType="VARCHAR" property="coachGender"/>
+			<result column="coach_username" jdbcType="VARCHAR" property="coachUsername"/>
+			<result column="coach_password" jdbcType="VARCHAR" property="coachPassword"/>
+			<result column="coach_identity" jdbcType="VARCHAR" property="coachIdentity"/>
+			<result column="coach_introduction" jdbcType="VARCHAR" property="coachIntroduction"/>
+			<result column="coach_time" jdbcType="INTEGER" property="coachTime"/>
+			<result column="coach_number" jdbcType="INTEGER" property="coachNumber"/>
+			<result column="coach_money" jdbcType="INTEGER" property="coachMoney"/>
+			<result column="coach_pic" jdbcType="VARCHAR" property="coachPic"/>
+			
+			</resultMap>
+        
+         
+    <!--注意sql语句没有分号结尾  -->  
+      <sql id="Base_Column_List">
+		coach_id, coach_name, coach_mobile, coach_gender, coach_username, 
+		coach_password, coach_identity, coach_introduction, 
+		coach_time, coach_number, coach_money ,coach_pic
+	</sql>
+      
+    <insert id="addCoach" useGeneratedKeys="true" keyProperty="coach_id" parameterType="com.ssm.po.Coach">
+    insert into coach (coach_id, coach_name, coach_mobile, coach_gender, coach_username, 
+    coach_password, coach_identity, coach_introduction, coach_time, coach_number, 
+    coach_money,coach_pic) values (#{coachId,jdbcType=INTEGER}, 
+    #{coachName,jdbcType=VARCHAR}, 
+    #{coachMobile,jdbcType=VARCHAR}, #{coachGender,jdbcType=VARCHAR}, 
+    #{coachUsername,jdbcType=VARCHAR}, #{coachPassword,jdbcType=VARCHAR}, 
+    #{coachIdentity,jdbcType=VARCHAR}, #{coachIntroduction,jdbcType=VARCHAR}, 
+    #{coachTime,jdbcType=INTEGER}, #{coachNumber,jdbcType=INTEGER}, 
+    #{coachMoney,jdbcType=INTEGER}, #{coachPic,jdbcType=VARCHAR})
+    </insert> 
+     
+    <select id="hasCoach" parameterType="java.lang.String" resultType="java.lang.Integer">
+    	select count(*) from coach where coach_username=#{coachUsername}
+    </select>
+    
+    <select id="selectCoachByUserNameAndPassword" parameterType="com.ssm.po.Coach" resultMap="BaseCoach">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from coach where coach_username=#{coachUsername} and coach_password=#{coachPassword}
+    </select>
+    
+    <select id="getCoachByCoachId" parameterType="java.lang.Integer" resultMap="BaseCoach">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from coach where coach_id=#{coachId} 
+    </select>  
+    
+    <update id="updateCoachMoney" parameterType="com.ssm.po.Coach">
+     	update coach
+     	set coach_money=#{coachMoney},
+     		coach_number=#{coachNumber}
+     	where coach_id=#{coachId}
+     </update>      
+     
+    <update id="updateCoachInfomation" parameterType="com.ssm.po.Coach">
+     	update coach
+     	set coach_name=#{coachName,jdbcType=VARCHAR},
+     	 coach_mobile=#{coachMobile,jdbcType=VARCHAR}, 
+     	 coach_gender=#{coachGender,jdbcType=VARCHAR}, 
+     	 coach_password=#{coachPassword,jdbcType=VARCHAR}, 
+     	 coach_identity=#{coachIdentity,jdbcType=VARCHAR}, 
+     	 coach_introduction=#{coachIntroduction,jdbcType=VARCHAR}, 
+     	 coach_time=#{coachTime,jdbcType=INTEGER} 
+     	where coach_id=#{coachId}
+     </update> 
+     
+     
+    
+    
+     <select id="getCoachOrderByNumber"  resultMap="BaseCoach">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from coach order by coach_number DESC limit 0,4
+    </select>
+    <select id="getCoachOrderByNumber2"  resultMap="BaseCoach">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from coach order by coach_number DESC limit 4,4
+    </select>
+      
+</mapper>  

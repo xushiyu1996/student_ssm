@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+  
+<mapper namespace="com.ssm.mapper.GuideMapper">
+  
+     <resultMap id="BaseGuide" type="com.ssm.po.Guide">
+			<id column="guide_id" jdbcType="INTEGER" property="guideId"/>
+			<result column="coach_id" jdbcType="INTEGER" property="coachId"/>
+			<result column="coach_name" jdbcType="VARCHAR" property="coachName"/>	
+			<result column="guide_type" jdbcType="VARCHAR" property="guideType"/>				
+			<result column="guide_timespan" jdbcType="INTEGER" property="guideTimespan"/>
+			<result column="guide_time" jdbcType="VARCHAR" property="guideTime"/>
+			<result column="guide_place" jdbcType="VARCHAR" property="guidePlace"/>
+			<result column="guide_name" jdbcType="VARCHAR" property="guideName"/>
+			<result column="guide_introduction" jdbcType="VARCHAR" property="guideIntroduction"/>
+			<result column="guide_price" jdbcType="INTEGER" property="guidePrice"/>
+			<result column="guide_number" jdbcType="INTEGER" property="guideNumber"/>
+			<result column="guide_rate" jdbcType="REAL" property="guideRate"/>
+			<result column="guide_checked" jdbcType="BIT" property="guideChecked"/>
+			</resultMap>
+			        
+         
+    <!--注意sql语句没有分号结尾  -->  
+      <sql id="Base_Column_List">
+		guide_id, coach_id,coach_name, guide_type,guide_timespan, guide_time, guide_place, guide_name, guide_introduction, guide_price, guide_number, guide_rate, guide_checked
+		</sql>
+      
+    <insert id="addGuide" useGeneratedKeys="true" keyProperty="guide_id" parameterType="com.ssm.po.Guide">
+   insert into guide (guide_id, coach_id,coach_name,guide_type, guide_timespan, guide_time, guide_place,
+    guide_name, guide_introduction, guide_price, guide_number, guide_rate, 
+    guide_checked) values (#{guideId,jdbcType=INTEGER}, #{coachId,jdbcType=INTEGER}, 
+    #{coachName,jdbcType=VARCHAR},
+    #{guideType,jdbcType=VARCHAR},    
+    #{guideTimespan,jdbcType=INTEGER}, #{guideTime,jdbcType=VARCHAR}, 
+    #{guidePlace,jdbcType=VARCHAR}, #{guideName,jdbcType=VARCHAR}, 
+    #{guideIntroduction,jdbcType=VARCHAR}, #{guidePrice,jdbcType=INTEGER}, 
+    #{guideNumber,jdbcType=INTEGER}, #{guideRate,jdbcType=REAL}, 
+    #{guideChecked,jdbcType=BIT})
+    </insert> 
+     
+    
+    
+    <select id="findUncheckedGuide" resultMap="BaseGuide">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from guide where guide_checked=0
+    </select>
+    
+     <select id="findCheckedGuide" resultMap="BaseGuide">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from guide where guide_checked=1
+    </select>
+     
+     <update id="checkGuide" parameterType="java.lang.Integer">
+     	update guide
+     	set guide_checked=1
+     	where guide_id=#{guideId}
+     </update> 
+     
+     <select id="findGuideByGuideId" parameterType="java.lang.Integer" resultMap="BaseGuide">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from guide where guide_Id=#{guideId}
+    </select>
+       
+      <select id="selectGuideByKey" parameterType="java.lang.String" resultMap="BaseGuide">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from guide where (coach_name like  CONCAT('%','${_parameter}','%')
+ 		or guide_type like  CONCAT('%','${_parameter}','%')
+ 		or guide_name like  CONCAT('%','${_parameter}','%')
+ 		or guide_introduction like  CONCAT('%','${_parameter}','%') )
+ 		and guide_checked=1
+    </select>
+    
+    <update id="setGuideRate" parameterType="com.ssm.po.Guide">
+    	update guide
+    	set guide_rate=#{guideRate}
+    	where guide_id=#{guideId}
+    </update> 
+    
+    <select id="findGuideByCoachId" parameterType="java.lang.Integer" resultMap="BaseGuide">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from guide where coach_Id=#{coachId} and guide_checked=1
+    </select>
+     
+    <update id="updateGuide" parameterType="com.ssm.po.Guide">
+    	update guide
+    	set guide_timespan=#{guideTimespan},
+    	guide_time=#{guideTime},
+    	guide_place=#{guidePlace},
+    	guide_name=#{guideName},
+    	guide_introduction=#{guideIntroduction},
+    	guide_price=#{guidePrice}
+    	where guide_id=#{guideId}
+    </update> 
+    
+    <update id="setGuideNumber" parameterType="com.ssm.po.Guide">
+    	update guide
+    	set guide_number=#{guideNumber}
+    	where guide_id=#{guideId}
+    </update>  
+    
+    <select id="selectGuideByType" parameterType="java.lang.String" resultMap="BaseGuide">
+    	select 
+		<include refid="Base_Column_List"></include>
+ 		from guide where guide_type ="${_parameter}" 		
+ 		and guide_checked=1
+    </select>
+    
+     
+</mapper>  

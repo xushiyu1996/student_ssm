@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+  
+<mapper namespace="com.ssm.mapper.UserMapper">
+  
+      <resultMap type="com.ssm.po.User" id="BaseUser">  
+        <!-- column:库表的字段名 property:实体类里的属性名 -->  
+        <id column="user_id" property="userId" />  
+        <result column="user_name" property="userName" />  
+        <result column="user_mobile" property="userMobile" />  
+        <result column="user_gender" property="userGender" />  
+        <result column="user_username" property="userUsername" />  
+        <result column="user_password" property="userPassword" />  
+        <result column="user_university" property="userUniversity" />  
+        <result column="user_grade" property="userGrade" />  
+        <result column="user_major" property="userMajor" />  
+        <result column="user_introduction" property="userIntroduction" />  
+        <result column="user_number" property="userNumber" />  
+        <result column="user_money" property="userMoney" />  
+        </resultMap>
+        
+         
+    <!--注意sql语句没有分号结尾  -->  
+      <sql id="base_column">
+      	user_id,user_name,user_mobile,user_gender,user_username,user_password,
+      	user_university,user_grade,user_major,user_introduction,user_number,user_money
+      </sql>
+      
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="user_id" parameterType="com.ssm.po.User">  
+        insert into user(user_id,user_name,user_mobile,user_gender,user_username,user_password,user_university,user_grade,user_major,user_introduction,user_number,user_money)
+         values(#{userId},#{userName},#{userMobile},#{userGender},
+         #{userUsername},#{userPassword},#{userUniversity},#{userGrade},
+         #{userMajor},#{userIntroduction},#{userNumber},#{userMoney})  
+    </insert> 
+     
+    <select id="hasUser" parameterType="java.lang.String" resultType="java.lang.Integer">
+    	select count(*) from user where user_username=#{userUsername}
+    </select>
+    
+    <select id="selectUserByUserNameAndPassword" parameterType="com.ssm.po.User" resultMap="BaseUser">
+    	select 
+		<include refid="base_column"></include>
+ 		from user where user_username=#{userUsername} and user_password=#{userPassword}
+    </select>
+    
+    <update id="updateUserMoney" parameterType="com.ssm.po.User">
+     	update user
+     	set user_money=#{userMoney},
+     	user_number=#{userNumber}
+     	where user_id=#{userId}
+     </update>   
+     
+     <update id="updateUserInfomation" parameterType="com.ssm.po.User">
+     	update user
+     	set user_name=#{userName,jdbcType=VARCHAR},
+     	 user_mobile=#{userMobile,jdbcType=VARCHAR}, 
+     	 user_gender=#{userGender,jdbcType=VARCHAR}, 
+     	 user_password=#{userPassword,jdbcType=VARCHAR}, 
+		 user_university=#{userUniversity,jdbcType=VARCHAR},
+		 user_grade=#{userGrade,jdbcType=VARCHAR},
+		 user_major=#{userMajor,jdbcType=VARCHAR},
+     	 user_introduction=#{userIntroduction,jdbcType=VARCHAR} 
+     	where user_id=#{userId}
+     </update>  
+      
+</mapper>  
